@@ -5,6 +5,9 @@ import {
   Brain, PawPrint, FileText, User, Building2, Check, Gift, Tag, ChevronDown, MessageCircle,
   Home, Wallet, Settings, Bell, Info,
 } from "lucide-react";
+import step1 from "@/assets/step1.png";
+import step2 from "@/assets/step2.png";
+import step3 from "@/assets/step3.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -91,8 +94,8 @@ function Index() {
   const [dark, setDark] = useState(true);
 
   return (
-    <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-10 px-6 py-10 lg:grid-cols-[1.1fr_1fr]">
-      <Showcase />
+    <div className={cn("mx-auto grid min-h-screen items-center gap-10 px-6 py-10", tab === "login" ? "max-w-7xl lg:grid-cols-[1.1fr_1fr]" : "max-w-3xl")}>
+      {tab === "login" && <Showcase />}
       <div className="glass rounded-3xl p-7 shadow-glow md:p-9">
         <div className="mb-6 flex items-center justify-between">
           <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft size={16} /> Voltar</button>
@@ -197,11 +200,14 @@ function OptionCard({ selected, onClick, icon, iconClass, title, desc }: { selec
   );
 }
 
-function Banner({ title, desc }: { title: ReactNode; desc: string }) {
+function Banner({ title, desc, img, imgLeft }: { title: ReactNode; desc: string; img: string; imgLeft?: boolean }) {
   return (
-    <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/25 to-transparent p-5">
-      <h3 className="text-lg font-bold">{title}</h3>
-      <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+    <div className={cn("flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary/25 to-transparent p-5", imgLeft && "flex-row-reverse")}>
+      <div className="flex-1">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+      </div>
+      <img src={img} alt="" width={992} height={672} className="hidden h-28 w-auto shrink-0 drop-shadow-[0_10px_25px_var(--primary)] sm:block" />
     </div>
   );
 }
@@ -234,7 +240,7 @@ function Signup({ onBack }: { onBack: () => void }) {
 
       <div key={step} className="space-y-4 animate-in fade-in slide-in-from-right-3 duration-300">
         {step === 1 && (<>
-          <Banner title={<>Mais organização para você. Mais <span className="text-gradient">cuidado</span> para eles.</>} desc="O EvoClin simplifica sua rotina e cuida dos seus pacientes em um só lugar." />
+          <Banner img={step1} title={<>Mais organização para você.<br />Mais <span className="text-gradient">cuidado</span> para eles.</>} desc="O EvoClin simplifica sua rotina e cuida dos seus pacientes em um só lugar." />
           <h3 className="font-bold">Qual é sua área de atuação?</h3>
           <div className="grid gap-3 sm:grid-cols-2">
             <OptionCard selected={area === "psi"} onClick={() => setArea("psi")} icon={<Brain />} iconClass="bg-violet/25 text-violet" title="Psicologia" desc="Ferramentas para saúde mental." />
@@ -249,7 +255,7 @@ function Signup({ onBack }: { onBack: () => void }) {
         </>)}
 
         {step === 2 && (<>
-          <Banner title={<>Vamos criar <span className="text-gradient">sua conta</span></>} desc="Quase lá! Preencha seus dados para configurar seu espaço." />
+          <Banner img={step2} title={<>Vamos criar <span className="text-gradient">sua conta</span></>} desc="Quase lá! Preencha seus dados para configurar seu espaço no EvoClin." />
           <h3 className="font-bold">Como você vai usar o EvoClin?</h3>
           <div className="grid gap-3 sm:grid-cols-2">
             <OptionCard selected={mode === "solo"} onClick={() => setMode("solo")} icon={<User />} iconClass="bg-primary/25 text-primary-glow" title="Atendo sozinho" desc="Consultório individual." />
@@ -267,7 +273,8 @@ function Signup({ onBack }: { onBack: () => void }) {
         </>)}
 
         {step === 3 && (<>
-          <Banner title="Você está a um passo de começar! 🚀" desc="Teste, evolua e mude de plano quando quiser." />
+          <Banner img={step3} imgLeft title="Você está a um passo de começar!" desc="Comece agora com o plano ideal para a sua clínica. Teste, evolua e mude de plano quando quiser." />
+          <div><h3 className="text-xl font-bold">Escolha como deseja começar</h3><p className="text-sm text-muted-foreground">Todos os planos incluem as funcionalidades essenciais para organizar sua clínica.</p></div>
           <div className="grid gap-3 sm:grid-cols-2">
             {([
               ["trial", "Teste grátis", "7 dias • Sem cartão", ["1 unidade", "Até 2 usuários", "Agenda completa", "Suporte por e-mail"]],
